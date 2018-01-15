@@ -14,23 +14,26 @@ namespace Tree
     public partial class Form1 : Form
     {
         private string hobbit;
-        private int antal,antal1;
+        private Dictionary<char, int> Frequencydictionary;
+        private int antal;
         public Form1()
         {
             InitializeComponent();
             hobbit = File.ReadAllText(System.IO.Directory.GetCurrentDirectory()+"/lord_of_the_rings-chapter1.txt");
             label3.Text = hobbit;
-
-            foreach (char mellan in hobbit)
-            {
-                if(mellan == ' ')
-                antal++;
-
-                antal1++;
+            Frequencydictionary=new Dictionary<char, int>();
+            foreach (char karak in hobbit)
+            { 
+                if (Frequencydictionary.ContainsKey(karak))
+                {
+                    Frequencydictionary[karak]++;
+                }
+                else
+                {
+                   Frequencydictionary.Add(karak,1);
+                }
             }
-            label1.Text = antal.ToString();
-            label2.Text = antal1.ToString();
-
+            label1.Text = Frequencydictionary.Keys.ToString();
         }
 
         private void label1_Click(object sender, EventArgs e)
