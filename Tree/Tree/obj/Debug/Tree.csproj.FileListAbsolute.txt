@@ -8,3 +8,14 @@ C:\Users\usr\Documents\Visual Studio 2017\Projects\Tree\Tree\obj\Debug\Tree.cspr
 C:\Users\usr\Documents\Visual Studio 2017\Projects\Tree\Tree\obj\Debug\Tree.exe
 C:\Users\usr\Documents\Visual Studio 2017\Projects\Tree\Tree\obj\Debug\Tree.pdb
 C:\Users\usr\Documents\Visual Studio 2017\Projects\Tree\Tree\obj\Debug\Tree.Form1.resources
+C:\Git\JohanOchSimonCompression\Tree\Tree\bin\Debug\Tree.exe.config
+C:\Git\JohanOchSimonCompression\Tree\Tree\bin\Debug\Tree.exe
+C:\Git\JohanOchSimonCompression\Tree\Tree\bin\Debug\Tree.pdb
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.csprojResolveAssemblyReference.cache
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.Form1.resources
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.Properties.Resources.resources
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.csproj.GenerateResource.Cache
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.csproj.CoreCompileInputs.cache
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.exe
+C:\Git\JohanOchSimonCompression\Tree\Tree\obj\Debug\Tree.pdb
+C:\Git\JohanOchSimonCompression\Tree\Tree\bin\Debug\lord_of_the_rings-chapter1.txt

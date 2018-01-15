@@ -17,13 +17,17 @@ namespace Tree
         
         public Form1()
         {
-            hobbit = File.ReadAllText(@"C:\Users\usr\Downloads\lord_of_the_rings-chapter1.txt");
-          
             InitializeComponent();
-           
+            hobbit = File.ReadAllText(System.IO.Directory.GetCurrentDirectory()+"/lord_of_the_rings-chapter1.txt");
+            label1.Text = hobbit;
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
