@@ -322,3 +322,4 @@ ASALocalRun/
 *.binlog
 /Tree/.vs/Tree/v15/Server/sqlite3/storage.ide-shm
 /Tree/.vs/Tree/v15/Server/sqlite3/storage.ide-wal
+/Tree/.vs/

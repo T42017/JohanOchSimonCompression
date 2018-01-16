@@ -14,33 +14,58 @@ namespace Tree
     public partial class Form1 : Form
     {
         private string hobbit;
-        private int antal,antal1;
+        private Dictionary<char, int> Frequencydictionary;
         public Form1()
         {
             InitializeComponent();
-            hobbit = File.ReadAllText(System.IO.Directory.GetCurrentDirectory()+"/lord_of_the_rings-chapter1.txt");
-            label3.Text = hobbit;
-
-            foreach (char mellan in hobbit)
-            {
-                if(mellan == ' ')
-                antal++;
-
-                antal1++;
-            }
-            label1.Text = antal.ToString();
-            label2.Text = antal1.ToString();
-
+            Frequencydictionary = new Dictionary<char, int>();
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;                                           
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                hobbit = File.ReadAllText(openFileDialog1.FileName);
+            }            
+            textBox1.Text = hobbit;
+            Frequencydictionary.Clear();
+            foreach (char karak in hobbit)
+            {
+                if (Frequencydictionary.ContainsKey(karak))
+                {
+                    Frequencydictionary[karak]++;
+                }
+                else
+                {
+                    Frequencydictionary.Add(karak, 1);
+                }
+            }
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+        }   
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            hobbit = "";
+            Frequencydictionary.Clear();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            pictureBox1.ImageLocation = System.IO.Directory.GetCurrentDirectory() + "/gang.jpg";
+        }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+              
+            }
         }
     }
 }
