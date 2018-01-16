@@ -329,3 +329,4 @@ ASALocalRun/
 *.dll
 *.ide
 *.lock
+/Tree/.vs
