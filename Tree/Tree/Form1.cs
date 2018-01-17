@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -30,26 +31,16 @@ namespace Tree
                 string path = Path.GetExtension(openFileDialog1.FileName);
                 if (path == ".txt")
                 {
-                    hobbit = File.ReadAllText(openFileDialog1.FileName);
-
+                    BackgroundWorker bw = new BackgroundWorker();
+                    hobbit = FileReader.ReadFile(openFileDialog1.FileName);
                     if (hobbit == null)
                         return;
                     textBox1.Text = hobbit;
-                    Frequencydictionary.Clear();
-                    foreach (char karak in hobbit)
-                    {
-                        if (Frequencydictionary.ContainsKey(karak))
-                        {
-                            Frequencydictionary[karak]++;
-                        }
-                        else
-                        {
-                            Frequencydictionary.Add(karak, 1);
-                        }
-                    }
+                    Task.Factory.StartNew(() => Frequencydictionary = FileReader.FrequencyLookup(hobbit));                  
                 }
                 else if (path == ".McFile")
                 {
+                    System.IO.File.ReadAllBytes(openFileDialog1.FileName);
                     //Huffman.decode
                 }
             }          
