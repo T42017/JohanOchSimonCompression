@@ -36,7 +36,6 @@ namespace Tree
             this.pictureBox1.Size = new System.Drawing.Size(1922, 1203);
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // textBox1
             // 
@@ -46,7 +45,6 @@ namespace Tree
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(494, 885);
             this.textBox1.TabIndex = 4;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // button1
             // 

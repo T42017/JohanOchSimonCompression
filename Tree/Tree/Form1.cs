@@ -22,10 +22,8 @@ namespace Tree
             Frequencydictionary = new Dictionary<char, int>();
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;                                           
         }
-
         private void button1_Click(object sender, EventArgs e)
-        {
-            
+        {           
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string path = Path.GetExtension(openFileDialog1.FileName);
@@ -45,19 +43,16 @@ namespace Tree
                 }
             }          
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             if (Frequencydictionary == null)
               return;  
             if(hobbit==null)
-                return;
-            
+                return;           
             Huffman huffman = new Huffman();
             Tree tree = huffman.CreateTree(Frequencydictionary);
             Stream stream= huffman.Encode(tree, hobbit);
             BinaryReader reader=new BinaryReader(stream);
-
             List<byte> bytes=new List<byte>();
             byte[] numberforbytes={1,2,4,8,16,32,64,128};
             bool[] bits=new bool[8];
@@ -80,39 +75,17 @@ namespace Tree
             {
                 Console.WriteLine(saveFileDialog1.FileName);
                 System.IO.File.WriteAllBytes(saveFileDialog1.FileName, bytes.ToArray());
-            }
-            
-           
+            }                       
         }   
-
         private void button3_Click(object sender, EventArgs e)
         {
             textBox1.Clear();
             hobbit = "";
             Frequencydictionary.Clear();
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             pictureBox1.ImageLocation = System.IO.Directory.GetCurrentDirectory() + "/gang.jpg";
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-              
-            }
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
