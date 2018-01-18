@@ -60,14 +60,9 @@ namespace Tree
 
             byte[] numberforbytes={1,2,4,8,16,32,64,128};
             bool[] bits=new bool[8];
-            int position = 0;
-
-            Stopwatch kl=new Stopwatch();
-            kl.Start();
-            Task.Factory.StartNew(() => bytes = FileReader.ByteConverter(reader, bits, numberforbytes, position));
-            kl.Stop();
-            textBox1.Text = kl.ElapsedMilliseconds.ToString();
-            //bytes = FileReader.ByteConverter(reader, bits, numberforbytes, position);
+            int position = 0;           
+            
+            Task.Factory.StartNew(() => bytes = FileReader.ByteConverter(reader, bits, numberforbytes, position));         
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -84,7 +79,10 @@ namespace Tree
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            pictureBox1.ImageLocation = System.IO.Directory.GetCurrentDirectory() + "/gang.jpg";
+            
+            pictureBox1.ImageLocation= Path.Combine(Environment.CurrentDirectory, "gang.jpg");
         }
+
+       
     }
 }
