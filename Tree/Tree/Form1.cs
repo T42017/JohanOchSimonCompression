@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -47,35 +48,33 @@ namespace Tree
         {
             if (Frequencydictionary == null)
               return;  
+
             if(hobbit==null)
-                return;           
+                return;         
+            
             Huffman huffman = new Huffman();
             Tree tree = huffman.CreateTree(Frequencydictionary);
             Stream stream= huffman.Encode(tree, hobbit);
             BinaryReader reader=new BinaryReader(stream);
             List<byte> bytes=new List<byte>();
+
             byte[] numberforbytes={1,2,4,8,16,32,64,128};
             bool[] bits=new bool[8];
             int position = 0;
-            for (int i = 0; i < reader.BaseStream.Length; i++)
-            {
-                bits[position] = reader.ReadBoolean();
-                position = (position + 1)%8;
-                if (position == 0)
-                {
-                    byte b = 0;
-                    for (int j = 0; j < bits.Length; j++)
-                    {
-                        b = (byte) (bits[j]?b+numberforbytes[j]:b);
-                    }
-                    bytes.Add(b);
-                }
-            }
+
+            Stopwatch kl=new Stopwatch();
+            kl.Start();
+            Task.Factory.StartNew(() => bytes = FileReader.ByteConverter(reader, bits, numberforbytes, position));
+            kl.Stop();
+            textBox1.Text = kl.ElapsedMilliseconds.ToString();
+            //bytes = FileReader.ByteConverter(reader, bits, numberforbytes, position);
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 Console.WriteLine(saveFileDialog1.FileName);
                 System.IO.File.WriteAllBytes(saveFileDialog1.FileName, bytes.ToArray());
-            }                       
+            }   
+            
         }   
         private void button3_Click(object sender, EventArgs e)
         {
