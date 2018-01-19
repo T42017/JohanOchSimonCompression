@@ -23,7 +23,7 @@ namespace Tree
             Frequencydictionary = new Dictionary<char, int>();
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;                                           
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {           
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -44,7 +44,7 @@ namespace Tree
                 }
             }          
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             if (Frequencydictionary == null)
               return;  
@@ -71,7 +71,7 @@ namespace Tree
             }   
             
         }   
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             textBox1.Clear();
             hobbit = "";
