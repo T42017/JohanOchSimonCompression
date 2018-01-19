@@ -16,7 +16,7 @@ namespace Tree
         {
         }
 
-        public List<bool> GetPathToNode(Node node)
+        public bool[] GetPathToNode(Node node)
         {
             List<bool> bits = new List<bool>();
             
@@ -25,15 +25,15 @@ namespace Tree
             while (currentNode != null)
             {
                 if (currentNode.HasLeftNode && currentNode.LeftNode.Equals(lastNode))
-                    bits.Add(true);
-                else if (currentNode.HasRightNode && currentNode.RightNode.Equals(lastNode))
                     bits.Add(false);
+                else if (currentNode.HasRightNode && currentNode.RightNode.Equals(lastNode))
+                    bits.Add(true);
 
                 lastNode = currentNode;
                 currentNode = currentNode.ParentNode;
             }
 
-            return bits;
+            return bits.ToArray().Reverse().ToArray();
         }
 
         public Node FindByValue(Node node, char value)
@@ -73,10 +73,10 @@ namespace Tree
                 {
                     writer.Write(false); // 0 for leaf
 
-                    byte[] numberForBytes = new byte[] {1, 2, 4, 8, 16, 32, 64, 128};
+                    byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
                     byte[] bytes = Encoding.Unicode.GetBytes(new[] {currentNode.Value});
 
-                    foreach (byte b in bytes)
+                    foreach (var b in bytes)
                     {
                         for (var j = 0; j < 8; j++)
                         {
@@ -113,36 +113,8 @@ namespace Tree
             writer.BaseStream.Position = 0;
             return stream;
         }
-
-        public byte[] ToByte()
-        {
-            Stream stream = ToBits();
-            BinaryReader reader = new BinaryReader(stream);
-
-            List<byte> bytes = new List<byte>();
-            byte[] numberforbytes = { 1, 2, 4, 8, 16, 32, 64, 128 };
-            bool[] bits = new bool[8];
-            int position = 0;
-
-            for (var i = 0; i < reader.BaseStream.Length; i++)
-            {
-                bits[position] = reader.ReadBoolean();
-                position = (position + 1) % 8;
-
-                if (position != 0) continue;
-
-                byte b = 0;
-                for (var j = 0; j < bits.Length; j++)
-                {
-                    b = (byte) (bits[j] ? b + numberforbytes[j] : b);
-                }
-                bytes.Add(b);
-            }
-
-            return bytes.ToArray();
-        }
-
-        public void FromBits(Stream stream)
+        
+        public long FromBits(Stream stream)
         {
             BinaryReader reader = new BinaryReader(stream);
             reader.BaseStream.Position = 0;
@@ -176,7 +148,7 @@ namespace Tree
                 {
                     currentNode = new Node {IsLeaf = true};
 
-                    byte[] numberForBytes = new byte[] { 1, 2, 4, 8, 16, 32, 64, 128 };
+                    byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
                     byte[] valueInByte =  new byte[Encoding.Unicode.GetByteCount(new char[1])];
 
                     for (var i = 0; i < valueInByte.Length; i++)
@@ -190,9 +162,6 @@ namespace Tree
 
                     char[] chars = Encoding.Unicode.GetChars(valueInByte);
                     currentNode.Value = chars[0];
-
-                    for (int i = 0; i < chars.Length; i++)
-                        Console.WriteLine(chars[i]);
 
                     if (lastNode != null)
                     {
@@ -222,15 +191,16 @@ namespace Tree
             }
 
             RootNode = rootNode;
+            return reader.BaseStream.Position;
         }
 
-        public void FromBytes(byte[] bytes)
+        public long FromBytes(byte[] bytes)
         {
             Stream stream = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(stream);
 
-            byte[] numberForBytes = new byte[] {1, 2, 4, 8, 16, 32, 64, 128};
-            foreach (byte b in bytes)
+            byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
+            foreach (var b in bytes)
             {
                 for (var i = 0; i < 8; i++)
                 {
@@ -238,7 +208,7 @@ namespace Tree
                 }
             }
             writer.Flush();
-            FromBits(stream);
+            return FromBits(stream);
         }
 
         public Node GetNodeWithOneChild(Node node)

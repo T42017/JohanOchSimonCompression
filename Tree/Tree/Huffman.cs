@@ -46,16 +46,17 @@ namespace Tree
         public Node[] GetTwoLeastFrequentNodes(List<Node> nodeList)
         {
             Node[] nodes = new Node[2];
+            nodes[0] = nodeList.FirstOrDefault();
 
-            foreach (Node node in nodeList)
+            foreach (var node in nodeList)
             {
-                if (nodes[0] == null || node.Frequency < nodes[0].Frequency)
-                {
-                    nodes[0] = node;
-                }
-                else if (nodes[1] == null || node.Frequency < nodes[1].Frequency)
+                if (!nodeList[0].Equals(node) && (nodes[1] == null || node.Frequency < nodes[1].Frequency))
                 {
                     nodes[1] = node;
+                }
+                else if (!nodeList[1].Equals(node) && (nodes[0] == null || node.Frequency < nodes[0].Frequency))
+                {
+                    nodes[0] = node;
                 }
             }
 
@@ -67,10 +68,10 @@ namespace Tree
             Stream stream = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(stream);
 
-            foreach (char character in data)
+            foreach (var character in data)
             {
                 Node node = tree.FindByValue(tree.RootNode, character);
-                List<bool> bits = tree.GetPathToNode(node);
+                bool[] bits = tree.GetPathToNode(node);
                 
                 foreach (var bit in bits)
                 {
@@ -83,11 +84,11 @@ namespace Tree
             return stream;
         }
 
-        public void Decode(Tree tree, BinaryReader reader)
+        public string Decode(Tree tree, BinaryReader reader, ulong length)
         {
             List<bool> bits = new List<bool>();
 
-            for (int i = 0; i < reader.BaseStream.Length; i++)
+            for (var i = reader.BaseStream.Position; i < (long) length; i++)
             {
                 bits.Add(reader.ReadBoolean());
             }
@@ -98,7 +99,7 @@ namespace Tree
             {
                 if (currentNode == null) throw new Exception("Corrupt file");
 
-                currentNode = b ? currentNode.LeftNode : currentNode.RightNode;
+                currentNode = b ? currentNode.RightNode : currentNode.LeftNode;
 
                 if (!currentNode.IsLeaf) continue;
 
@@ -106,7 +107,7 @@ namespace Tree
                 currentNode = tree.RootNode;
             }
 
-            Console.WriteLine(decodedString.ToString());
+            return decodedString.ToString();
         }
 
     }

@@ -42,16 +42,33 @@ namespace Tree
                 {
                     List<byte> byteList = new List<byte>();
                     byteList.AddRange(File.ReadAllBytes(openFileDialog1.FileName));
-
+                    
                     UInt64 length = BitConverter.ToUInt64(byteList.ToArray(), 0);
 
                     for (int i = 0; i < 8; i++)
                         byteList.RemoveAt(0);
 
+                    Stream stream = new MemoryStream();
+                    BinaryWriter writer = new BinaryWriter(stream);
+                    BinaryReader reader = new BinaryReader(stream);
+
+                    byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
+                    foreach (var b in byteList)
+                    {
+                        for (var i = 0; i < 8; i++)
+                        {
+                            writer.Write((b & numberForBytes[i]) != 0);
+                        }
+                    }
+                    writer.Flush();
+
                     Huffman huffman = new Huffman();
                     Tree tree = new Tree();
-                    tree.FromBytes(byteList.ToArray());
-                    
+                    long position = tree.FromBytes(byteList.ToArray());
+
+                    reader.BaseStream.Position = position;
+
+                    textBox1.Text = huffman.Decode(tree, reader, length);
                 }
             }          
         }
@@ -64,11 +81,12 @@ namespace Tree
                 return;
             Huffman huffman = new Huffman();
             Tree tree = huffman.CreateTree(_frequencydictionary);
+            tree.Print(tree.RootNode);
             Stream stream= huffman.Encode(tree, _hobbit);
 
-            BinaryReader reader=new BinaryReader(stream);
+            BinaryReader dataReader = new BinaryReader(stream);
             List<byte> bytes=new List<byte>();
-            byte[] numberforbytes={1,2,4,8,16,32,64,128};
+            byte[] numberforbytes={ 128, 64, 32, 16, 8, 4, 2, 1 };
             bool[] bits=new bool[8];
             int position = 0;
 
@@ -76,12 +94,12 @@ namespace Tree
             BinaryReader treeReader = new BinaryReader(treeBitStream);
 
             UInt64 treeLength = (ulong) treeReader.BaseStream.Length;
-            UInt64 length = (ulong) reader.BaseStream.Length;
-            ulong realLength = ((length + treeLength) + (8 - ((length + treeLength) % 8)));
+            UInt64 dataLength = (ulong) dataReader.BaseStream.Length;
+            UInt64 length = treeLength + dataLength;
+            ulong realLength = (length + (8 - (length % 8)));
 
             bytes.AddRange(BitConverter.GetBytes(length));
-
-
+            
             for (var i = 0; i < (int) treeLength; i++)
             {
                 bits[position] = i < (int) treeLength && treeReader.ReadBoolean();
@@ -97,9 +115,9 @@ namespace Tree
                 bytes.Add(b);
             }
 
-            for (var i = 0; i < (int) realLength; i++)
+            for (var i = 0; i < (int) (realLength - treeLength); i++)
             {
-                bits[position] = i < (int) length && reader.ReadBoolean();
+                bits[position] = i < (int) dataLength && dataReader.ReadBoolean();
                 position = (position + 1) % 8;
                 if (position != 0) continue;
 
@@ -111,12 +129,11 @@ namespace Tree
                 bytes.Add(b);
             }
 
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                Console.WriteLine(saveFileDialog1.FileName);
-                System.IO.File.WriteAllBytes(saveFileDialog1.FileName, bytes.ToArray());
-            }                       
-        }   
+            if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+            Console.WriteLine(saveFileDialog1.FileName);
+            File.WriteAllBytes(saveFileDialog1.FileName, bytes.ToArray());
+        }
 
         private void ClearBtn_Click(object sender, EventArgs e)
         {
