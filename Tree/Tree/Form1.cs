@@ -103,6 +103,7 @@ namespace Tree
             bytes.AddRange(BitConverter.GetBytes(length));
             
             for (var i = 0; i < (int) treeLength; i++)
+            {
                 bits[position] = i < (int) treeLength && treeReader.ReadBoolean();
                 position = (position + 1) % 8;
 
