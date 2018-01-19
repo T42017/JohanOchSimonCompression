@@ -21,8 +21,7 @@ namespace Tree
         public Form1()
         {
             InitializeComponent();
-            _frequencydictionary = new Dictionary<char, int>();
-            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;                                           
+            _frequencydictionary = new Dictionary<char, int>();                                
         }
 
         private void LoadBtn_Click(object sender, EventArgs e)
