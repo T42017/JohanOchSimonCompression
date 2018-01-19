@@ -83,7 +83,7 @@ namespace Tree
             
             Huffman huffman = new Huffman();
             Tree tree = huffman.CreateTree(_frequencydictionary);
-            tree.Print(tree.RootNode);
+            Tree.Print(tree.RootNode);
             Stream stream= huffman.Encode(tree, _hobbit);
 
             BinaryReader dataReader = new BinaryReader(stream);

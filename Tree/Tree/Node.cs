@@ -8,8 +8,6 @@ namespace Tree
 {
     public class Node
     {
-        public bool HasBeenWritten = false;
-
         private Node _leftNode;
         public Node LeftNode
         {
@@ -47,6 +45,7 @@ namespace Tree
         public int Frequency;
 
         public bool HasLeftNode = false, HasRightNode = false, HasParentNode = false, IsLeaf = false;
+        public bool HasBeenWritten = false;
 
         public Node() { }
 

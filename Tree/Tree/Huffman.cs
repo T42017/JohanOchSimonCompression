@@ -43,7 +43,7 @@ namespace Tree
             return tree;
         }
 
-        public Node[] GetTwoLeastFrequentNodes(List<Node> nodeList)
+        private Node[] GetTwoLeastFrequentNodes(List<Node> nodeList)
         {
             Node[] nodes = new Node[2];
             nodes[0] = nodeList.FirstOrDefault();

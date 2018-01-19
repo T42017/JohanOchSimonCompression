@@ -36,21 +36,20 @@ namespace Tree
             return bits.ToArray().Reverse().ToArray();
         }
 
-        public Node FindByValue(Node node, char value)
+        public Node FindByValue(Node startNode, char value)
         {
+            if (startNode.IsLeaf && startNode.Value == value)
+                return startNode;
 
-            if (node.IsLeaf && node.Value == value)
-                return node;
-
-            if (node.HasLeftNode)
+            if (startNode.HasLeftNode)
             {
-                Node n1 = FindByValue(node.LeftNode, value);
+                Node n1 = FindByValue(startNode.LeftNode, value);
                 if (n1 != null) return n1;
             }
 
-            if (node.HasRightNode)
+            if (startNode.HasRightNode)
             {
-                Node n2 = FindByValue(node.RightNode, value);
+                Node n2 = FindByValue(startNode.RightNode, value);
                 if (n2 != null) return n2;
             }
 
@@ -92,7 +91,7 @@ namespace Tree
                 {
                     if (!currentNode.HasBeenWritten)
                     {
-                        writer.Write(true); // 1 for node
+                        writer.Write(true); // 1 for startNode
                         currentNode.HasBeenWritten = true;
                     }
 
@@ -128,7 +127,7 @@ namespace Tree
                 bool bit = reader.ReadBoolean();
 
                 Node currentNode = null;
-                if (bit) // 1 for node
+                if (bit) // 1 for startNode
                 {
                     currentNode = new Node();
 
@@ -229,24 +228,24 @@ namespace Tree
             SetNodeAndChildrenToUnwritten(node.RightNode);
         }
 
-        public void Print(Node node)
+        public static void Print(Node startNode)
         {
-            if (node.IsLeaf)
-                Console.WriteLine("leaf " + node.Value);
+            if (startNode.IsLeaf)
+                Console.WriteLine("leaf " + startNode.Value);
             else
             {
-                Console.WriteLine("node " + node.Frequency);
+                Console.WriteLine("startNode " + startNode.Frequency);
             }
 
-            if (node.HasLeftNode)
+            if (startNode.HasLeftNode)
             {
                 Console.WriteLine("left");
-                Print(node.LeftNode);
+                Print(startNode.LeftNode);
             }
-            if (node.HasRightNode)
+            if (startNode.HasRightNode)
             {
                 Console.WriteLine("right");
-                Print(node.RightNode);
+                Print(startNode.RightNode);
             }
             Console.WriteLine("back");
         }
