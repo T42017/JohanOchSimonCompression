@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Tree
 {
@@ -15,7 +16,7 @@ namespace Tree
         {
         }
 
-        public List<bool> GetPathToNode(Node node)
+        public bool[] GetPathToNode(Node node)
         {
             List<bool> bits = new List<bool>();
             
@@ -24,15 +25,15 @@ namespace Tree
             while (currentNode != null)
             {
                 if (currentNode.HasLeftNode && currentNode.LeftNode.Equals(lastNode))
-                    bits.Add(true);
-                else if (currentNode.HasRightNode && currentNode.RightNode.Equals(lastNode))
                     bits.Add(false);
+                else if (currentNode.HasRightNode && currentNode.RightNode.Equals(lastNode))
+                    bits.Add(true);
 
                 lastNode = currentNode;
                 currentNode = currentNode.ParentNode;
             }
 
-            return bits;
+            return bits.ToArray().Reverse().ToArray();
         }
 
         public Node FindByValue(Node node, char value)
@@ -72,10 +73,10 @@ namespace Tree
                 {
                     writer.Write(false); // 0 for leaf
 
-                    byte[] numberForBytes = new byte[] {1, 2, 4, 8, 16, 32, 64, 128};
+                    byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
                     byte[] bytes = Encoding.Unicode.GetBytes(new[] {currentNode.Value});
 
-                    foreach (byte b in bytes)
+                    foreach (var b in bytes)
                     {
                         for (var j = 0; j < 8; j++)
                         {
@@ -108,26 +109,25 @@ namespace Tree
                 }
             }
 
-            writer.BaseStream.Position = 0;
             writer.Flush();
+            writer.BaseStream.Position = 0;
             return stream;
         }
-
-        public void FromBits(Stream stream)
+        
+        public long FromBits(Stream stream)
         {
-            RootNode = null;
             BinaryReader reader = new BinaryReader(stream);
             reader.BaseStream.Position = 0;
+
             Node rootNode = null;
             Node lastNode = null;
-            Node currentNode = null;
-            int bitCount = 0;
+            bool done = false;
 
-            while (bitCount < reader.BaseStream.Length)
+            while (!done)
             {
                 bool bit = reader.ReadBoolean();
-                bitCount++;
 
+                Node currentNode = null;
                 if (bit) // 1 for node
                 {
                     currentNode = new Node();
@@ -143,33 +143,25 @@ namespace Tree
 
                         lastNode = GetNodeWithOneChild(currentNode);
                     }
-
-
-                    if (rootNode == null)
-                    {
-                        rootNode = currentNode;
-                        lastNode = rootNode;
-                    }
                 }
                 else // 0 for leaf
                 {
-                    currentNode = new Node();
-                    currentNode.IsLeaf = true;
+                    currentNode = new Node {IsLeaf = true};
 
-                    byte[] numberForBytes = new byte[] { 1, 2, 4, 8, 16, 32, 64, 128 };
+                    byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
                     byte[] valueInByte =  new byte[Encoding.Unicode.GetByteCount(new char[1])];
 
-                    for (int i = 0; i < valueInByte.Length; i++)
+                    for (var i = 0; i < valueInByte.Length; i++)
                     {
                         for (var j = 0; j < 8; j++)
                         {
-                            bool bitForValue = reader.ReadBoolean();
-                            bitCount++;
+                            var bitForValue = reader.ReadBoolean();
                             valueInByte[i] = (byte) (valueInByte[i] + (bitForValue ? numberForBytes[j] : 0));
                         }
                     }
 
-                    currentNode.Value = Encoding.Unicode.GetChars(valueInByte)[0];
+                    char[] chars = Encoding.Unicode.GetChars(valueInByte);
+                    currentNode.Value = chars[0];
 
                     if (lastNode != null)
                     {
@@ -177,18 +169,46 @@ namespace Tree
                             lastNode.LeftNode = currentNode;
                         else if (!lastNode.HasRightNode)
                             lastNode.RightNode = currentNode;
-                        
-                        currentNode.ParentNode = lastNode;
-
-                        lastNode = GetNodeWithOneChild(lastNode);
                     }
-                    
-                    if (currentNode.HasParentNode)
-                        currentNode = currentNode.ParentNode;
+                    currentNode.ParentNode = lastNode;
+
+                    lastNode = GetNodeWithOneChild(lastNode);
+
+                    if (lastNode.ParentNode == null && lastNode.HasLeftNode && lastNode.HasRightNode)
+                    {
+                        break;
+                    }
                 }
+
+                if (rootNode == null)
+                {
+                    rootNode = currentNode;
+                    lastNode = rootNode;
+                }
+
+                if (lastNode == null) done = true;
+
             }
 
             RootNode = rootNode;
+            return reader.BaseStream.Position;
+        }
+
+        public long FromBytes(byte[] bytes)
+        {
+            Stream stream = new MemoryStream();
+            BinaryWriter writer = new BinaryWriter(stream);
+
+            byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
+            foreach (var b in bytes)
+            {
+                for (var i = 0; i < 8; i++)
+                {
+                    writer.Write((b & numberForBytes[i]) != 0);
+                }
+            }
+            writer.Flush();
+            return FromBits(stream);
         }
 
         public Node GetNodeWithOneChild(Node node)

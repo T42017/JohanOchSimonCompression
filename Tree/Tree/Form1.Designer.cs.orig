@@ -48,6 +48,15 @@ namespace Tree
             // 
             // LoadBtn
             // 
+<<<<<<< HEAD
+            this.button1.Location = new System.Drawing.Point(658, 24);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(227, 72);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Load txt file";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+=======
             this.LoadBtn.Location = new System.Drawing.Point(658, 24);
             this.LoadBtn.Name = "LoadBtn";
             this.LoadBtn.Size = new System.Drawing.Size(227, 72);
@@ -55,9 +64,19 @@ namespace Tree
             this.LoadBtn.Text = "Load txt file";
             this.LoadBtn.UseVisualStyleBackColor = true;
             this.LoadBtn.Click += new System.EventHandler(this.LoadBtn_Click);
+>>>>>>> feature-Huffman
             // 
             // SaveBtn
             // 
+<<<<<<< HEAD
+            this.button2.Location = new System.Drawing.Point(658, 121);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(227, 72);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Save";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
+=======
             this.SaveBtn.Location = new System.Drawing.Point(658, 121);
             this.SaveBtn.Name = "SaveBtn";
             this.SaveBtn.Size = new System.Drawing.Size(227, 72);
@@ -65,9 +84,19 @@ namespace Tree
             this.SaveBtn.Text = "Save";
             this.SaveBtn.UseVisualStyleBackColor = true;
             this.SaveBtn.Click += new System.EventHandler(this.SAveBtn_Click);
+>>>>>>> feature-Huffman
             // 
             // ClearBtn
             // 
+<<<<<<< HEAD
+            this.button3.Location = new System.Drawing.Point(658, 210);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(227, 72);
+            this.button3.TabIndex = 9;
+            this.button3.Text = "clear";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
+=======
             this.ClearBtn.Location = new System.Drawing.Point(658, 210);
             this.ClearBtn.Name = "ClearBtn";
             this.ClearBtn.Size = new System.Drawing.Size(227, 72);
@@ -75,6 +104,7 @@ namespace Tree
             this.ClearBtn.Text = "clear";
             this.ClearBtn.UseVisualStyleBackColor = true;
             this.ClearBtn.Click += new System.EventHandler(this.ClearBtn_Click);
+>>>>>>> feature-Huffman
             // 
             // openFileDialog1
             // 

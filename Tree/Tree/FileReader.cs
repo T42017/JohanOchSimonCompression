@@ -20,7 +20,7 @@ namespace Tree
 
         public static Dictionary<char, int> FrequencyLookup(string text)
         {
-            Dictionary<char,int>outputOfDictionary=new Dictionary<char, int>();
+            Dictionary<char,int> outputOfDictionary = new Dictionary<char, int>();
             foreach (char karak in text)
             {
                 if (outputOfDictionary.ContainsKey(karak))

@@ -24,9 +24,14 @@ namespace Tree
             _frequencydictionary = new Dictionary<char, int>();
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;                                           
         }
+<<<<<<< HEAD
+        private void Button1_Click(object sender, EventArgs e)
+        {           
+=======
 
         private void LoadBtn_Click(object sender, EventArgs e)
         {
+>>>>>>> feature-Huffman
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string path = Path.GetExtension(openFileDialog1.FileName);
@@ -73,14 +78,24 @@ namespace Tree
                 }
             }          
         }
+<<<<<<< HEAD
+        private void Button2_Click(object sender, EventArgs e)
+=======
 
         private void SAveBtn_Click(object sender, EventArgs e)
+>>>>>>> feature-Huffman
         {
             if (_frequencydictionary == null)
               return;  
+<<<<<<< HEAD
+
+            if(hobbit==null)
+                return;         
+            
+=======
             if(_hobbit==null)
                 return;
-            
+>>>>>>> feature-Huffman
             Huffman huffman = new Huffman();
             Tree tree = huffman.CreateTree(_frequencydictionary);
             tree.Print(tree.RootNode);
@@ -88,9 +103,26 @@ namespace Tree
 
             BinaryReader dataReader = new BinaryReader(stream);
             List<byte> bytes=new List<byte>();
-            byte[] numberforbytes={ 128, 64, 32, 16, 8, 4, 2, 1 };
+<<<<<<< HEAD
+
+            byte[] numberforbytes={1,2,4,8,16,32,64,128};
             bool[] bits=new bool[8];
             int position = 0;           
+            
+            Task.Factory.StartNew(() => bytes = FileReader.ByteConverter(reader, bits, numberforbytes, position));         
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine(saveFileDialog1.FileName);
+                System.IO.File.WriteAllBytes(saveFileDialog1.FileName, bytes.ToArray());
+            }   
+            
+        }   
+        private void Button3_Click(object sender, EventArgs e)
+=======
+            byte[] numberforbytes={ 128, 64, 32, 16, 8, 4, 2, 1 };
+            bool[] bits=new bool[8];
+            int position = 0;
 
             Stream treeBitStream = tree.ToBits();
             BinaryReader treeReader = new BinaryReader(treeBitStream);
@@ -103,6 +135,7 @@ namespace Tree
             bytes.AddRange(BitConverter.GetBytes(length));
             
             for (var i = 0; i < (int) treeLength; i++)
+            {
                 bits[position] = i < (int) treeLength && treeReader.ReadBoolean();
                 position = (position + 1) % 8;
 
@@ -137,6 +170,7 @@ namespace Tree
         }
 
         private void ClearBtn_Click(object sender, EventArgs e)
+>>>>>>> feature-Huffman
         {
             textBox1.Clear();
             _hobbit = "";
