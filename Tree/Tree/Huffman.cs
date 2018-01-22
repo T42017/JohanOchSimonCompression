@@ -84,11 +84,11 @@ namespace Tree
             return stream;
         }
 
-        public string Decode(Tree tree, BinaryReader reader, ulong length)
+        public string Decode(Tree tree, BinaryReader reader)
         {
             List<bool> bits = new List<bool>();
 
-            for (var i = reader.BaseStream.Position; i < (long) length; i++)
+            for (var i = reader.BaseStream.Position; i < reader.BaseStream.Length; i++)
             {
                 bits.Add(reader.ReadBoolean());
             }

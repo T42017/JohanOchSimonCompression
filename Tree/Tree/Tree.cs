@@ -109,15 +109,11 @@ namespace Tree
             }
 
             writer.Flush();
-            writer.BaseStream.Position = 0;
             return stream;
         }
         
-        public long FromBits(Stream stream)
+        public long FromBits(BinaryReader reader)
         {
-            BinaryReader reader = new BinaryReader(stream);
-            reader.BaseStream.Position = 0;
-
             Node rootNode = null;
             Node lastNode = null;
             bool done = false;
@@ -127,7 +123,7 @@ namespace Tree
                 bool bit = reader.ReadBoolean();
 
                 Node currentNode = null;
-                if (bit) // 1 for startNode
+                if (bit) // 1 for node
                 {
                     currentNode = new Node();
 
@@ -182,7 +178,7 @@ namespace Tree
                 if (rootNode == null)
                 {
                     rootNode = currentNode;
-                    lastNode = rootNode;
+                    lastNode = currentNode;
                 }
 
                 if (lastNode == null) done = true;
@@ -191,23 +187,6 @@ namespace Tree
 
             RootNode = rootNode;
             return reader.BaseStream.Position;
-        }
-
-        public long FromBytes(byte[] bytes)
-        {
-            Stream stream = new MemoryStream();
-            BinaryWriter writer = new BinaryWriter(stream);
-
-            byte[] numberForBytes = new byte[] { 128, 64, 32, 16, 8, 4, 2, 1 };
-            foreach (var b in bytes)
-            {
-                for (var i = 0; i < 8; i++)
-                {
-                    writer.Write((b & numberForBytes[i]) != 0);
-                }
-            }
-            writer.Flush();
-            return FromBits(stream);
         }
 
         public Node GetNodeWithOneChild(Node node)
